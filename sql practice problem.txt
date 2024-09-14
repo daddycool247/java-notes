@@ -1,0 +1,67 @@
+create table STUDENTS(sroll number(3) primary key,sname varchar(30) not null,maths number(3),english number(3),science number(3));
+
+Table created.
+SQL> insert into STUDENTS(sroll,sname,maths,english,science)values(101,'Sanika',98,76,85);
+
+1 row created.
+
+SQL> insert into STUDENTS(sroll,sname,maths,english,science)values(102,'Aman',99,65,85);
+
+1 row created.
+
+SQL> insert into STUDENTS(sroll,sname,maths,english,science)values(103,'Raj',19,59,18);
+
+1 row created.
+
+SQL> select * from STUDENTS
+  2  ;
+
+     SROLL SNAME                               MATHS    ENGLISH    SCIENCE
+---------- ------------------------------ ---------- ---------- ----------
+       101 Sanika                                 98         76         85
+       102 Aman                                   99         65         85
+       103 Raj                                    19         59         18
+
+SQL> alter table STUDENTS add(total number(3));
+
+Table altered.
+update STUDENTS set total=maths+english+science;
+
+3 rows updated.
+
+SQL> select * from STUDENTS;
+
+     SROLL SNAME                               MATHS    ENGLISH    SCIENCE
+---------- ------------------------------ ---------- ---------- ----------
+     TOTAL
+----------
+       101 Sanika                                 98         76         85
+       259
+
+       102 Aman                                   99         65         85
+       249
+
+       103 Raj                                    19         59         18
+        96
+
+
+SQL> select * from STUDENTS where total<100;
+
+     SROLL SNAME                               MATHS    ENGLISH    SCIENCE
+---------- ------------------------------ ---------- ---------- ----------
+     TOTAL
+----------
+       103 Raj                                    19         59         18
+        96
+
+SQL> select max(total) as "maximum total marks of the student" from STUDENTS;
+
+maximum total marks of the student
+----------------------------------
+                               259
+
+SQL> select min(total) as "minimum total marks of the student" from STUDENTS;
+
+minimum total marks of the student
+----------------------------------
+                                96

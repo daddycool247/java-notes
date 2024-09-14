@@ -1,0 +1,267 @@
+Practical 5. Joining
+SQL> create table emp11(ENo number primary key,Ename varchar(25),JDate date,Place varchar(25));
+
+Table created.
+
+SQL> insert into emp11(ENo,Ename,JDate,Place)values(101,"Sanika","2-Oct-2023","Mumbai");
+insert into emp11(ENo,Ename,JDate,Place)values(101,"Sanika","2-Oct-2023","Mumbai")
+                                                                         *
+ERROR at line 1:
+ORA-00984: column not allowed here
+
+
+SQL> desc emp11
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ENO                                       NOT NULL NUMBER
+ ENAME                                              VARCHAR2(25)
+ JDATE                                              DATE
+ PLACE                                              VARCHAR2(25)
+
+SQL> insert into emp11(ENo,Ename,JDate,Place)values(101,'Sanika','2-Oct-2023','Mumbai');
+
+1 row created.
+
+SQL> insert into emp11(ENo,Ename,JDate,Place)values(102,'Shubham','5-Oct-2023','Thane');
+
+1 row created.
+
+SQL> insert into emp11(ENo,Ename,JDate,Place)values(103,'Shubham','16-Nov-2023','Pune');
+
+1 row created.
+
+SQL> insert into emp11(ENo,Ename,JDate,Place)values(104,'Sanket','1-Jan-2024','Mumbai');\
+  2  ;
+insert into emp11(ENo,Ename,JDate,Place)values(104,'Sanket','1-Jan-2024','Mumbai');\
+                                                                                  *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended
+
+
+SQL> insert into emp11(ENo,Ename,JDate,Place)values(104,'Sanket','1-Jan-2024','Mumbai');
+
+1 row created.
+
+SQL> insert into emp11(ENo,Ename,JDate,Place)values(105,'Aman','5-Jan-2024','Pune');
+
+1 row created.
+
+SQL> select * from emp11;
+
+       ENO ENAME                     JDATE     PLACE
+---------- ------------------------- --------- -------------------------
+       101 Sanika                    02-OCT-23 Mumbai
+       102 Shubham                   05-OCT-23 Thane
+       103 Shubham                   16-NOV-23 Pune
+       104 Sanket                    01-JAN-24 Mumbai
+       105 Aman                      05-JAN-24 Pune
+
+SQL> create table deptname(ENo number primary key,MNo number,DName varchar(25),Exp number);
+
+Table created.
+
+SQL> insert into deptname(ENO,MNo,DName,Exp)value(101,3521685498,'Sales',1);
+insert into deptname(ENO,MNo,DName,Exp)value(101,3521685498,'Sales',1)
+                                       *
+ERROR at line 1:
+ORA-00926: missing VALUES keyword
+
+
+SQL> insert into deptname(ENO,MNo,DName,Exp)values(101,3521685498,'Sales',1);
+
+1 row created.
+
+SQL> insert into deptname(ENO,MNo,DName,Exp)values(102,3,'Sales',1);
+
+1 row created.
+
+SQL> delete from deptname where ENO=102;
+
+1 row deleted.
+
+SQL> select * from deptname;
+
+       ENO        MNO DNAME                            EXP
+---------- ---------- ------------------------- ----------
+       101 3521685498 Sales                              1
+
+SQL> insert into deptname(ENO,MNo,DName,Exp)values(102,6546544554,'Accounting',2);
+
+1 row created.
+
+SQL> insert into deptname(ENO,MNo,DName,Exp)values(103,6545133544,'Accounting',2);
+
+1 row created.
+
+SQL> insert into deptname(ENO,MNo,DName,Exp)values(104,3123456485,'R&D',3);
+Enter value for d: '
+old   1: insert into deptname(ENO,MNo,DName,Exp)values(104,3123456485,'R&D',3)
+new   1: insert into deptname(ENO,MNo,DName,Exp)values(104,3123456485,'R'',3)
+ERROR:
+ORA-01756: quoted string not properly terminated
+
+
+SQL> insert into deptname(ENO,MNo,DName,Exp)values(104,3123456485,'Research',3);
+
+1 row created.
+
+SQL> insert into deptname(ENO,MNo,DName,Exp)values(105,3123516545,'Research',1);
+
+1 row created.
+
+SQL> select * from deptname;
+
+       ENO        MNO DNAME                            EXP
+---------- ---------- ------------------------- ----------
+       101 3521685498 Sales                              1
+       102 6546544554 Accounting                         2
+       103 6545133544 Accounting                         2
+       104 3123456485 Research                           3
+       105 3123516545 Research                           1
+
+SQL> select ENo,Ename,JDate from emp11 inner join deptname on emp11.ENo=deptname.ENO;
+select ENo,Ename,JDate from emp11 inner join deptname on emp11.ENo=deptname.ENO
+       *
+ERROR at line 1:
+ORA-00918: column ambiguously defined
+
+
+SQL> alter table deptname update(ENo number);
+alter table deptname update(ENo number)
+                     *
+ERROR at line 1:
+ORA-01735: invalid ALTER TABLE option
+
+
+SQL> select * from emp11 inner join deptname on emp11.ENo=deptname.ENO;
+
+       ENO ENAME                     JDATE     PLACE
+---------- ------------------------- --------- -------------------------
+       ENO        MNO DNAME                            EXP
+---------- ---------- ------------------------- ----------
+       101 Sanika                    02-OCT-23 Mumbai
+       101 3521685498 Sales                              1
+
+       102 Shubham                   05-OCT-23 Thane
+       102 6546544554 Accounting                         2
+
+       103 Shubham                   16-NOV-23 Pune
+       103 6545133544 Accounting                         2
+
+
+       ENO ENAME                     JDATE     PLACE
+---------- ------------------------- --------- -------------------------
+       ENO        MNO DNAME                            EXP
+---------- ---------- ------------------------- ----------
+       104 Sanket                    01-JAN-24 Mumbai
+       104 3123456485 Research                           3
+
+       105 Aman                      05-JAN-24 Pune
+       105 3123516545 Research                           1
+
+
+SQL> select emp11.ENo,emp11.Ename from emp inner join deptname on emp11.ENo=deptname.ENo;
+select emp11.ENo,emp11.Ename from emp inner join deptname on emp11.ENo=deptname.ENo
+                                                             *
+ERROR at line 1:
+ORA-00904: "EMP11"."ENO": invalid identifier
+
+
+SQL> select emp11.ENo,emp11.Ename from emp inner join deptname on emp11.ENo=deptname.ENO;
+select emp11.ENo,emp11.Ename from emp inner join deptname on emp11.ENo=deptname.ENO
+                                                             *
+ERROR at line 1:
+ORA-00904: "EMP11"."ENO": invalid identifier
+
+
+SQL> select emp11.ENo,emp11.Ename from emp inner join deptname on emp11.ENO=deptname.ENO;
+select emp11.ENo,emp11.Ename from emp inner join deptname on emp11.ENO=deptname.ENO
+                                                             *
+ERROR at line 1:
+ORA-00904: "EMP11"."ENO": invalid identifier
+
+
+SQL> select emp11.ENo,emp11.Ename,deptname.MNo from emp inner join deptname on emp11.Eno=deptname.ENO;
+select emp11.ENo,emp11.Ename,deptname.MNo from emp inner join deptname on emp11.Eno=deptname.ENO
+                                                                          *
+ERROR at line 1:
+ORA-00904: "EMP11"."ENO": invalid identifier
+
+
+SQL> select emp11.ENo,emp11.Ename,deptname.MNo from emp inner join deptname on emp11.Eno=deptname.ENo;
+select emp11.ENo,emp11.Ename,deptname.MNo from emp inner join deptname on emp11.Eno=deptname.ENo
+                                                                          *
+ERROR at line 1:
+ORA-00904: "EMP11"."ENO": invalid identifier
+
+
+SQL> select emp11.ENo,emp11.EName from emp11,deptname where emp11.ENo=deptname.ENo;
+
+       ENO ENAME
+---------- -------------------------
+       101 Sanika
+       102 Shubham
+       103 Shubham
+       104 Sanket
+       105 Aman
+
+SQL> select emp11.ENo,emp11.EName,emp11.JDate, deptname.MNo from emp11, deptname where emp11.ENo=deptname.ENo;
+
+       ENO ENAME                     JDATE            MNO
+---------- ------------------------- --------- ----------
+       101 Sanika                    02-OCT-23 3521685498
+       102 Shubham                   05-OCT-23 6546544554
+       103 Shubham                   16-NOV-23 6545133544
+       104 Sanket                    01-JAN-24 3123456485
+       105 Aman                      05-JAN-24 3123516545
+
+SQL> insert into deptname(ENO,MNo,DName,Exp)value(106,3696648656,'Sales',1);
+insert into deptname(ENO,MNo,DName,Exp)value(106,3696648656,'Sales',1)
+                                       *
+ERROR at line 1:
+ORA-00926: missing VALUES keyword
+
+
+SQL> insert into deptname(ENO,MNo,DName,Exp)values(106,3696648656,'Sales',1);
+
+1 row created.
+
+SQL> select * from deptname;
+
+       ENO        MNO DNAME                            EXP
+---------- ---------- ------------------------- ----------
+       101 3521685498 Sales                              1
+       102 6546544554 Accounting                         2
+       103 6545133544 Accounting                         2
+       104 3123456485 Research                           3
+       105 3123516545 Research                           1
+       106 3696648656 Sales                              1
+
+6 rows selected.
+
+SQL> select emp11.ENo,emp11.EName,emp11.JDate, deptname.MNo from emp11, deptname where emp11.ENo=deptname.ENo;
+
+       ENO ENAME                     JDATE            MNO
+---------- ------------------------- --------- ----------
+       101 Sanika                    02-OCT-23 3521685498
+       102 Shubham                   05-OCT-23 6546544554
+       103 Shubham                   16-NOV-23 6545133544
+       104 Sanket                    01-JAN-24 3123456485
+       105 Aman                      05-JAN-24 3123516545
+
+SQL> select emp11.ENo,emp11.EName,emp11.JDate, deptname.MNo from deptname, deptname where emp11.ENo=deptname.ENo;
+select emp11.ENo,emp11.EName,emp11.JDate, deptname.MNo from deptname, deptname where emp11.ENo=deptname.ENo
+                                                                                               *
+ERROR at line 1:
+ORA-00918: column ambiguously defined
+
+
+SQL> select deptname.ENo,deptname.DName,emp11.JDate from deptname, emp11 where deptname.ENo=emp11.ENo;
+
+       ENO DNAME                     JDATE
+---------- ------------------------- ---------
+       101 Sales                     02-OCT-23
+       102 Accounting                05-OCT-23
+       103 Accounting                16-NOV-23
+       104 Research                  01-JAN-24
+       105 Research                  05-JAN-24
